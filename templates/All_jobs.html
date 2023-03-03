@@ -1,0 +1,102 @@
+{% extends "base.html" %} {% block title %}All Jobs{% endblock %} {% block
+styleInclude %}
+<style>
+  @media screen and (max-width: 480px) {
+    div.mobile_card {
+      margin: auto;
+      width: 100%;
+      padding: 10px;
+    }
+  }
+</style>
+{% endblock %} {% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-auto">
+      <h2>Available Jobs</h2>
+    </div>
+  </div>
+  <div class="row">
+    {% for i in range(0,data|length) %}
+    <div class="col-lg-4 col-md-6 col-xs-12">
+      <div class="card mb-3" style="max-width: 540px">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img
+              src="{{ url_for('static',filename='images/logo2.png') }}"
+              class="img-fluid"
+              alt="..."
+            />
+          </div>
+          <div class="col-md-8 mobile_card">
+            <div class="card-body">
+              <h5 class="card-title text-center">{{data[i]['Job_Profile']}}</h5>
+              <p class="card-text text-center">
+                <strong>Company:</strong>{{data[i]['CompanyName']}}
+              </p>
+              <p class="card-text text-center">
+                <strong>{{ data[i]['Salary'] }}</strong>
+              </p>
+              <p class="card-text text-center">
+                <small class="text-muted">{{data[i]['LastDate']}}</small>
+              </p>
+              <p class="text-center">
+                <button
+                  onClick="showJD('{{ data[i]['job_id'] }}','{{ data[i]['Job_description_file_name']}}');"
+                  class="btn btn btn-outline-info me-md-3"
+                >
+                  View Details</button
+                ><button
+                  id="{{data[i]['job_id']}}"
+                  class="btn btn btn-outline-success apply_job"
+                >
+                  Apply
+                </button>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+<script>
+  function showJD(a, b) {
+    let features =
+      "menubar=yes,location=yes,resizable=no,scrollbars=yes,status=no,height=700,width=1000";
+    let url = "/static/Job_Description/" + a + "/" + b;
+
+    window.open(url, "_blank", features);
+  }
+</script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script>
+  var $j = jQuery.noConflict();
+</script>
+<script>
+  $(document).on("click", ".apply_job", function () {
+    var job_id = $(this).attr("id");
+    alert("Click on OK to apply for job and wait for response");
+    $j.ajax({
+      url: "/HR1/apply_job",
+      method: "POST",
+      data: { job_id: job_id },
+      success: function (data) {
+        alert(data.Message);
+        if (data.StatusCode == 200) {
+          document.getElementById(job_id).innerHTML =
+            "<i class='fas fa-check-circle'></i>Applied!";
+          document.getElementById(job_id).disabled = true;
+          document.getElementById(job_id).className =
+            "btn btn btn-light apply_job";
+        }
+        if (data.StatusCode == 400) {
+          alert(data.Message);
+        }
+      },
+    });
+  });
+</script>
+{% endblock %}

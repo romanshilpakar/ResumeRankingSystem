@@ -1,0 +1,147 @@
+{% extends "base.html" %} {% block title %}Employee Dashboard{% endblock %} {%
+block Addnav %}
+<li class="nav-item active">
+  <a class="nav-link" style="z-index: 10" href="/HR1/show_job">Jobs</a>
+</li>
+{% endblock %} {% block content %}
+<div class="container-fluid">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 mt-5" style="z-index: 10">
+        <h2>Hello, {{ session['user_name'] }}</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-md-8 col-lg-6 mt-5">
+        <form
+          action="/uploadResume"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          <div class="form-group">
+            <label class="fs-4 font-weight-bold mb-3"
+              >Please Upload Your Resume Here:</label
+            >
+            <input
+              type="file"
+              style="z-index: 10"
+              class="form-control form-control-lg"
+              name="resume"
+              accept=".pdf, .docx"
+            />
+            <p
+              class="form-text fs-6 text-muted text-danger"
+              style="text-align: right"
+            >
+              Only .docx or .pdf file type are Allowed
+            </p>
+          </div>
+
+          <div class="form-group mt-5">
+            <input
+              type="submit"
+              name="resumeSubmit"
+              style="z-index: 10; margin-left: 30%"
+              class="btn btn-primary btn-lg w-50"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade"
+  id="success_Show"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header" style="border: none">
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <img
+                src="{{ url_for('static',filename='images/check.png') }}"
+                style="width: 50%; height: 60%"
+                class="img-fluid mx-auto d-block"
+              />
+              <h2 class="text-center">Successfuly Uploaded!!</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade"
+  id="error_Show"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header" style="border: none">
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <img
+                src="{{ url_for('static',filename='images/cross1.png') }}"
+                style="width: 50%; height: 60%"
+                class="img-fluid mx-auto d-block"
+              />
+              <h2 class="text-center mt-4">Please upload your Resume first</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8"
+  crossorigin="anonymous"
+></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script>
+  var $j = jQuery.noConflict();
+</script>
+{% if errorMsg %}
+<script>
+  var myModal = new bootstrap.Modal(document.getElementById("error_Show"), {
+    keyboard: true,
+  });
+  myModal.show();
+  //$('#error_Show').modal('show');
+</script>
+{% endif %} {% if successMsg %}
+<script>
+  var myModal = new bootstrap.Modal(document.getElementById("success_Show"), {
+    keyboard: true,
+  });
+  myModal.show();
+  //$('#success_Show').modal('show');
+</script>
+{% endif %} {% endblock %}

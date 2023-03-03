@@ -1,0 +1,9 @@
+docx2txt>=0.8
+Flask>=2.2.2
+Flask-PyMongo>=2.3.0
+google-auth>=2.16.0
+google-auth-oauthlib>=0.8.0
+PyMuPDF>=1.21.1
+scikit-learn>=1.2.0
+spacy==3.5.0
+spacy-transformers==1.2.2

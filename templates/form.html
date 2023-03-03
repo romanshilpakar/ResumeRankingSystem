@@ -1,0 +1,23 @@
+<style>
+  .form-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+  }
+</style>
+
+<html>
+  <body>
+    <div class="form-container">
+      <form method="post">
+        <p>What is your unique HR ID?</p>
+        <input type="number" name="response" />
+        <input type="submit" value="Submit" />
+      </form>
+      {% if message %}
+      <p>{{ message }}</p>
+      {% endif %}
+    </div>
+  </body>
+</html>

@@ -1,0 +1,200 @@
+{% extends "base.html" %} {% block title %}HR Dashboard{% endblock %} {% block
+Addnav %}
+<li class="nav-item active">
+  <a class="nav-link" href="/HR1/post_job">Post JOB</a>
+</li>
+{% endblock %} {% block content %}
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script>
+  var $j = jQuery.noConflict();
+</script>
+<style>
+  @media screen and (max-width: 560px) {
+    #categoryInput {
+      width: 100%;
+    }
+    input.sBto {
+      width: 100%;
+      height: 20%;
+      margin-bottom: 20px;
+    }
+  }
+  @media screen and (min-width: 560px) {
+    input.sBto {
+      width: 60%;
+      margin-left: 20%;
+      height: 30%;
+      margin-bottom: 50px;
+    }
+  }
+</style>
+<div class="contain-fluid">
+  <div class="container">
+    <div class="row">
+      <h2>{{errorMsg}}</h2>
+
+      <div class="col-xs-12">
+        <form class="form-horizontal" action="/empSearch" method="POST">
+          <div class="form-floating mb-3 categoryInput1">
+            <input
+              type="text"
+              name="category"
+              id="categoryInput"
+              class="form-control"
+            />
+            <label for="categoryInput">Enter Job Title:</label>
+          </div>
+          <div class="form-group">
+            <input
+              type="submit"
+              class="btn btn-danger sBto"
+              name="submit"
+              value="Search"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 table-responsive-sm">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th class="text-center">No</th>
+              <th class="text-center">Name</th>
+              <th class="text-center">Email</th>
+              <th class="text-center">Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in range(0,data|length) %}
+            <tr>
+              <td class="text-center">{{(i+1)}}</td>
+              <td class="text-center">{{data[i]['Name']}}</td>
+              <td class="text-center">{{data[i]['Email']}}</td>
+              <td>
+                <input
+                  type="button"
+                  name="view"
+                  value="View"
+                  id="{{data[i]['_id']}}"
+                  data-bs-toggle="modal"
+                  data-bs-target="#viewdetails"
+                  class="btn btn-secondary view_data"
+                  style="margin-left: 10%"
+                />
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade"
+  id="viewdetails"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="viewdetails"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down"
+    role="document"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="exampleModalLongTitle">
+          Details of Candidate:
+        </h3>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-responsive">
+          <br />
+          <tr>
+            <label>Name:</label>
+            <input
+              type="text"
+              class="form-control-plaintext"
+              readonly
+              id="view_name"
+            />
+          </tr>
+          <br />
+          <tr>
+            <label>LINKEDIN LINK:</label>
+            <input
+              type="text"
+              class="form-control-plaintext"
+              readonly
+              id="view_linkedin_link"
+            />
+          </tr>
+          <br />
+          <tr>
+            <label>SKILLS:</label>
+            <input
+              type="text"
+              class="form-control-plaintext"
+              readonly
+              id="view_skills"
+            />
+          </tr>
+
+          <br />
+          <tr>
+            <label>CERTIFICATION:</label>
+            <input
+            type="text"
+            class="form-control-plaintext"
+            readonly
+            id="view_certificates"
+          />
+          </tr>
+
+          <br />
+        </table>
+      </div>
+      <div class="modal-footer">
+          <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).on("click", ".view_data", function () {
+    var employee_id = $(this).attr("id");
+    $j.ajax({
+      url: "/viewdetails",
+      method: "POST",
+      data: { employee_id: employee_id },
+      success: function (data) {
+        $("#view_name").val(data.name);
+        $("#view_linkedin_link").val(data.linkedin_link);
+        $("#view_skills").val(data.skills);
+        $("#view_certificates").val(data.certificate);
+
+      },
+    });
+  });
+</script>
+
+
+{% endblock %}
